@@ -1,4 +1,4 @@
-# Getting Started with Create React App
+``[# Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
@@ -53,9 +53,30 @@ To learn React, check out the [React documentation](https://reactjs.org/).
 `git clone git@github.com:rjtch/secure-oauth2-oidc-workshop.git`
 
 #### Replace the existing WORKSHOP_HOME directory in the setup directory
-`[setup/run_keycloak_docker.sh]`
+`[secure-oauth2-oidc-workshop/setup/run_keycloak_docker.sh]`
 
 #### Run keycloak in Docker
 `./run_keycloak_docker.sh`
 
 #### Start the resource-server in [lab1/library-server-initial]
+
+### `npm run cp-opanapi-spec & npm run generate-api`
+
+Copy the swagger.json from the swagger and generate the DTOs and services using OpenApi.
+
+
+**Note: You can use one of the following users to login:**
+
+```angular2html
+Username |  Email                       |   Password   |  Role
+         |                              |              | 
+bwayne   |  bruce.wayne@example.com     |   wayne      |  LIBRARY_USER
+         |                              |              |     
+bbanner  |  bruce.banner@example.com    |   banner     |  LIBRARY_USER
+         |                              |              | 
+ckent    |  clark.kent@example.com      |   kent       |  LIBRARY_ADMIN
+
+```
+To add more users and roles you can edit this file and restart keycloak:
+
+`secure-oauth2-oidc-workshop/setup/keycloak_realm_workshop.json`
