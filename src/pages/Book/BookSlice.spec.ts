@@ -1,7 +1,5 @@
-import booksSlice, { createNewBook, initialState, State } from './booksSlice';
-import booksReducer, { updateBook } from './booksSlice';
-import { createInitialStateFactory } from '@reduxjs/toolkit/dist/entities/entity_state';
-import { CollectionModelBookResource } from '../../api/generated';
+import booksSlice from './BooksSlice';
+import booksReducer, { createNewBook, initialState, updateBook } from './BooksSlice';
 
 const entities =
     {
@@ -22,7 +20,7 @@ describe('book reducer', () => {
     });
 
     it('should load allBooks and update state', () => {
-        const state: State = initialState;
+        const state = initialState;
 
         // given
         const actualState = booksReducer(

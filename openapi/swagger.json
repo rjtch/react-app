@@ -1,1 +1,619 @@
-{"openapi":"3.0.1","info":{"title":"Sample Auth-Server","version":"v1"},"servers":[{"url":"/","description":"self"},{"url":"http://localhost:8080/auth/realms/workshop/protocol/openid-connect/token","description":"Default Server URL"},{"url":"http://localhost:9091","description":"local"}],"paths":{"/v1/users/{userId}":{"get":{"tags":["user-rest-controller"],"operationId":"getUser","parameters":[{"name":"userId","in":"path","required":true,"schema":{"type":"string","format":"uuid"}}],"responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"$ref":"#/components/schemas/UserResource"}}}}},"security":[{"oauth":[]}]},"put":{"tags":["user-rest-controller"],"operationId":"updateUser","parameters":[{"name":"userId","in":"path","required":true,"schema":{"type":"string","format":"uuid"}}],"requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/ModifyingUserResource"}}},"required":true},"responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"$ref":"#/components/schemas/UserResource"}}}}},"security":[{"oauth":[]}]},"delete":{"tags":["user-rest-controller"],"operationId":"deleteUser","parameters":[{"name":"userId","in":"path","required":true,"schema":{"type":"string","format":"uuid"}}],"responses":{"204":{"description":"No Content"}},"security":[{"oauth":[]}]}},"/v1/books/{bookId}":{"get":{"tags":["book-rest-controller"],"operationId":"getBookById","parameters":[{"name":"bookId","in":"path","required":true,"schema":{"type":"string","format":"uuid"}}],"responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"$ref":"#/components/schemas/BookResource"}}}}},"security":[{"oauth":[]}]},"put":{"tags":["book-rest-controller"],"operationId":"updateBook","parameters":[{"name":"bookId","in":"path","required":true,"schema":{"type":"string","format":"uuid"}}],"requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/BookResource"}}},"required":true},"responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"$ref":"#/components/schemas/BookResource"}}}}},"security":[{"oauth":[]}]},"delete":{"tags":["book-rest-controller"],"operationId":"deleteBook","parameters":[{"name":"bookId","in":"path","required":true,"schema":{"type":"string","format":"uuid"}}],"responses":{"204":{"description":"No Content"}},"security":[{"oauth":[]}]}},"/v1/users":{"get":{"tags":["user-rest-controller"],"operationId":"getAllUsers","responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"type":"array","items":{"$ref":"#/components/schemas/UserResource"}}}}}},"security":[{"oauth":[]}]},"post":{"tags":["user-rest-controller"],"operationId":"createUser","requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/ModifyingUserResource"}}},"required":true},"responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"$ref":"#/components/schemas/UserResource"}}}}},"security":[{"oauth":[]}]}},"/v1/books":{"get":{"tags":["book-rest-controller"],"operationId":"getAllBooks","responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"$ref":"#/components/schemas/CollectionModelBookResource"}}}}},"security":[{"oauth":[]}]},"post":{"tags":["book-rest-controller"],"operationId":"createBook","requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/BookResource"}}},"required":true},"responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"$ref":"#/components/schemas/BookResource"}}}}},"security":[{"oauth":[]}]}},"/v1/books/{bookId}/return":{"post":{"tags":["book-rest-controller"],"operationId":"returnBookById","parameters":[{"name":"bookId","in":"path","required":true,"schema":{"type":"string","format":"uuid"}}],"responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"$ref":"#/components/schemas/BookResource"}}}}},"security":[{"oauth":[]}]}},"/v1/books/{bookId}/borrow":{"post":{"tags":["book-rest-controller"],"operationId":"borrowBookById","parameters":[{"name":"bookId","in":"path","required":true,"schema":{"type":"string","format":"uuid"}}],"responses":{"200":{"description":"OK","content":{"*/*":{"schema":{"$ref":"#/components/schemas/BookResource"}}}}},"security":[{"oauth":[]}]}}},"components":{"schemas":{"Link":{"type":"object","properties":{"rel":{"type":"string"},"href":{"type":"string"},"hreflang":{"type":"string"},"media":{"type":"string"},"title":{"type":"string"},"type":{"type":"string"},"deprecation":{"type":"string"},"profile":{"type":"string"},"name":{"type":"string"}}},"ModifyingUserResource":{"required":["email","firstName","lastName","password"],"type":"object","properties":{"identifier":{"type":"string","format":"uuid"},"email":{"maxLength":100,"minLength":1,"type":"string"},"firstName":{"maxLength":100,"minLength":1,"type":"string"},"lastName":{"maxLength":100,"minLength":1,"type":"string"},"password":{"pattern":"[A-Za-z0-9_!]{8,100}","type":"string"},"roles":{"type":"array","items":{"type":"string","enum":["LIBRARY_USER","LIBRARY_CURATOR","LIBRARY_ADMIN"]}},"links":{"type":"array","items":{"$ref":"#/components/schemas/Link"}}}},"UserResource":{"required":["email","firstName","lastName"],"type":"object","properties":{"identifier":{"type":"string","format":"uuid"},"email":{"maxLength":100,"minLength":1,"type":"string"},"firstName":{"maxLength":100,"minLength":1,"type":"string"},"lastName":{"maxLength":100,"minLength":1,"type":"string"},"links":{"type":"array","items":{"$ref":"#/components/schemas/Link"}}}},"BookResource":{"required":["authors","description","isbn","title"],"type":"object","properties":{"identifier":{"type":"string","format":"uuid"},"isbn":{"maxLength":50,"minLength":1,"type":"string"},"title":{"maxLength":50,"minLength":1,"type":"string"},"description":{"maxLength":50,"minLength":1,"type":"string"},"authors":{"type":"array","items":{"type":"string"}},"borrowed":{"type":"boolean"},"borrowedBy":{"$ref":"#/components/schemas/UserResource"},"links":{"type":"array","items":{"$ref":"#/components/schemas/Link"}}}},"CollectionModelBookResource":{"type":"object","properties":{"links":{"type":"array","items":{"$ref":"#/components/schemas/Link"}},"content":{"type":"array","items":{"$ref":"#/components/schemas/BookResource"}}}}},"securitySchemes":{"security_auth":{"type":"oauth2","flows":{"authorizationCode":{"authorizationUrl":"http://localhost:8080/auth/realms/workshop/protocol/openid-connect/token","tokenUrl":"http://localhost:8080/auth/realms/workshop/protocol/openid-connect/token","scopes":{}}}}}}}
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Sample Auth-Server",
+    "version": "v1"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:9091/library-server",
+      "description": "local"
+    }
+  ],
+  "paths": {
+    "/v1/users/{userId}": {
+      "get": {
+        "tags": [
+          "user-rest-controller"
+        ],
+        "operationId": "getUser",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResource"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "oauth": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "user-rest-controller"
+        ],
+        "operationId": "updateUser",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ModifyingUserResource"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResource"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "oauth": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "user-rest-controller"
+        ],
+        "operationId": "deleteUser",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        },
+        "security": [
+          {
+            "oauth": []
+          }
+        ]
+      }
+    },
+    "/v1/books/{bookId}": {
+      "get": {
+        "tags": [
+          "book-rest-controller"
+        ],
+        "operationId": "getBookById",
+        "parameters": [
+          {
+            "name": "bookId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/BookResource"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "oauth": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "book-rest-controller"
+        ],
+        "operationId": "updateBook",
+        "parameters": [
+          {
+            "name": "bookId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BookResource"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/BookResource"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "oauth": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "book-rest-controller"
+        ],
+        "operationId": "deleteBook",
+        "parameters": [
+          {
+            "name": "bookId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        },
+        "security": [
+          {
+            "oauth": []
+          }
+        ]
+      }
+    },
+    "/v1/users": {
+      "get": {
+        "tags": [
+          "user-rest-controller"
+        ],
+        "operationId": "getAllUsers",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/UserResource"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "oauth": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "user-rest-controller"
+        ],
+        "operationId": "createUser",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ModifyingUserResource"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResource"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "oauth": []
+          }
+        ]
+      }
+    },
+    "/v1/books": {
+      "get": {
+        "tags": [
+          "book-rest-controller"
+        ],
+        "operationId": "getAllBooks",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/CollectionModelBookResource"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "oauth": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "book-rest-controller"
+        ],
+        "operationId": "createBook",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BookResource"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/BookResource"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "oauth": []
+          }
+        ]
+      }
+    },
+    "/v1/books/{bookId}/return": {
+      "post": {
+        "tags": [
+          "book-rest-controller"
+        ],
+        "operationId": "returnBookById",
+        "parameters": [
+          {
+            "name": "bookId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/BookResource"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "oauth": []
+          }
+        ]
+      }
+    },
+    "/v1/books/{bookId}/borrow": {
+      "post": {
+        "tags": [
+          "book-rest-controller"
+        ],
+        "operationId": "borrowBookById",
+        "parameters": [
+          {
+            "name": "bookId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/BookResource"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "oauth": []
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Link": {
+        "type": "object",
+        "properties": {
+          "rel": {
+            "type": "string"
+          },
+          "href": {
+            "type": "string"
+          },
+          "hreflang": {
+            "type": "string"
+          },
+          "media": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "deprecation": {
+            "type": "string"
+          },
+          "profile": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "ModifyingUserResource": {
+        "required": [
+          "email",
+          "firstName",
+          "lastName",
+          "password"
+        ],
+        "type": "object",
+        "properties": {
+          "identifier": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "email": {
+            "maxLength": 100,
+            "minLength": 1,
+            "type": "string"
+          },
+          "firstName": {
+            "maxLength": 100,
+            "minLength": 1,
+            "type": "string"
+          },
+          "lastName": {
+            "maxLength": 100,
+            "minLength": 1,
+            "type": "string"
+          },
+          "password": {
+            "pattern": "[A-Za-z0-9_!]{8,100}",
+            "type": "string"
+          },
+          "roles": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "LIBRARY_USER",
+                "LIBRARY_CURATOR",
+                "LIBRARY_ADMIN"
+              ]
+            }
+          },
+          "links": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Link"
+            }
+          }
+        }
+      },
+      "UserResource": {
+        "required": [
+          "email",
+          "firstName",
+          "lastName"
+        ],
+        "type": "object",
+        "properties": {
+          "identifier": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "email": {
+            "maxLength": 100,
+            "minLength": 1,
+            "type": "string"
+          },
+          "firstName": {
+            "maxLength": 100,
+            "minLength": 1,
+            "type": "string"
+          },
+          "lastName": {
+            "maxLength": 100,
+            "minLength": 1,
+            "type": "string"
+          },
+          "links": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Link"
+            }
+          }
+        }
+      },
+      "BookResource": {
+        "required": [
+          "authors",
+          "description",
+          "isbn",
+          "title"
+        ],
+        "type": "object",
+        "properties": {
+          "identifier": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "isbn": {
+            "maxLength": 50,
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": {
+            "maxLength": 50,
+            "minLength": 1,
+            "type": "string"
+          },
+          "description": {
+            "maxLength": 50,
+            "minLength": 1,
+            "type": "string"
+          },
+          "authors": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "borrowed": {
+            "type": "boolean"
+          },
+          "borrowedBy": {
+            "$ref": "#/components/schemas/UserResource"
+          },
+          "links": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Link"
+            }
+          }
+        }
+      },
+      "CollectionModelBookResource": {
+        "type": "object",
+        "properties": {
+          "links": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Link"
+            }
+          },
+          "content": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/BookResource"
+            }
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "security_auth": {
+        "type": "oauth2",
+        "flows": {
+          "authorizationCode": {
+            "authorizationUrl": "http://localhost:8080/auth/realms/workshop/protocol/openid-connect/token",
+            "tokenUrl": "http://localhost:8080/auth/realms/workshop/protocol/openid-connect/token",
+            "scopes": {}
+          }
+        }
+      }
+    }
+  }
+}

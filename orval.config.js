@@ -1,14 +1,11 @@
 module.exports = {
     api: {
+        input: './openapi/swagger.json',
         output: {
-            mode: 'split',
             target: './src/api',
-            schemas: './src/api/generated',
-            client: 'react-query',
-            mock: false,
-        },
-        input: {
-            target: './openapi/swagger.json',
+            override: {
+                mutator: "./src/api/axios.ts",
+            },
         },
     },
 };

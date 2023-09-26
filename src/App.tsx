@@ -1,26 +1,38 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import Sidecar from './components/sidecar/sidecar';
+import { AuthProvider, UserManager } from 'oidc-react';
+import { Navigate, Route, Routes } from 'react-router-dom';
+import { Home } from './pages/home/Home';
+import { About } from './pages/about/About';
+import { BooksRessourcesList } from './pages/Book/BooksRessourcesList';
+import { Basket } from './pages/basket/Basket';
+
+export const oidcConfig = {
+    authority: 'http://localhost:8080/auth/realms/workshop/',
+    redirectUri: window.location.origin,
+    clientId: 'spa',
+    responseType: 'code',
+    loadUserInfo: true,
+    scope: 'openid profile offline_access',
+    useSilentRefresh: false,
+    showDebugInformation: true,
+};
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    return (
+        <Sidecar>
+            <AuthProvider {...oidcConfig}>
+                <Routes>
+                    <Route path="/about" element={<About/>}/>
+                    <Route path="/books" element={<BooksRessourcesList/>}/>
+                    <Route path="/basket" element={<Basket/>}/>
+                    <Route path="/" element={<Home/>}/>
+                    <Route path="*" element={<Navigate to="/" replace/>}/>
+                </Routes>
+            </AuthProvider>
+        </Sidecar>
+    );
 }
 
 export default App;

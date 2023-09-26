@@ -2,7 +2,7 @@ import Axios, { AxiosRequestConfig } from "axios";
 
 // our global Axios instance including the base URL
 const axios = Axios.create({
-    baseURL: 'http://localhost:9091/library-server',
+    baseURL: '',
 });
 
 // this function was taken from the Orval docs

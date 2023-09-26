@@ -1,28 +1,44 @@
-import { useSelector } from 'react-redux';
-import { RootState } from '../../app/store';
-import { selectBookById } from './booksSlice';
-import { Fragment } from 'react';
+import { BookResource } from '../../api/generated';
+import { Button, Container, ListGroup, Modal } from 'react-bootstrap';
+import { useState } from 'react';
 
 interface Props {
-    booksIsbn: any;
+    book: BookResource;
+    index: number;
 }
 
-export const BookContent = ({ booksIsbn }: Props) => {
-    const book =
-        useSelector((state: RootState) => selectBookById(state, booksIsbn));
-    if (book?.content) {
-        for (let b of book?.content) {
-            return (
-                <article>
-                    <h3>{b.title}</h3>
-                    <div>
-                        <span>{b.isbn}</span>
-                        <span>{b.description}</span>
-                        <span>{b.authors}</span>
-                    </div>
-                </article>
-            );
-        }
+export const BookContent = ({ book, index }: Props) => {
+    const [show, setShow] = useState(false);
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
+    if (book) {
+        return (
+            <Container className="p-3">
+                <ListGroup>
+                    <Button variant="info" onClick={handleShow}>
+                        <strong>{book.title}</strong> - By - {book.authors[0] }
+                    </Button>
+                    <Modal show={show} onHide={handleClose}>
+                        <Modal.Header closeButton>
+                            <Modal.Title>{book.title}</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>
+                            {book.description}
+                            <br/>
+                            <p>
+                                This book was borrowed by - <strong>{book.borrowedBy?.firstName}
+                                {book.borrowedBy?.lastName}</strong>
+                            </p>
+                        </Modal.Body>
+                        <Modal.Footer>
+                            <Button variant="secondary" onClick={handleClose}>
+                                Close
+                            </Button>
+                        </Modal.Footer>
+                    </Modal>
+                </ListGroup>
+            </Container>
+        );
     }
     return <></>;
 };

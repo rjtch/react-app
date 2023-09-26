@@ -9,5 +9,5 @@ import type { BookResource } from './bookResource';
 
 export interface CollectionModelBookResource {
   links?: Link[];
-  content?: BookResource[];
+  bookResourceList?: BookResource[];
 }
