@@ -59,7 +59,7 @@ To learn React, check out the [React documentation](https://reactjs.org/).
 `./run_keycloak_docker.sh`
 
 #### Start the resource-server in [lab1/library-server-initial]
-Swagger-UI: `http://localhost:9091/library-server/swagger-ui/index.html#/`
+Swagger-UI: [http://localhost:9091/library-server/swagger-ui/index.html#/](http://localhost:9091/library-server/swagger-ui/index.html#/)
 
 ### `npm run cp-opanapi-spec & npm run generate-api`
 
