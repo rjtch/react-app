@@ -53,7 +53,7 @@ To learn React, check out the [React documentation](https://reactjs.org/).
 `git clone git@github.com:rjtch/secure-oauth2-oidc-workshop.git`
 
 #### Replace the existing WORKSHOP_HOME directory in the setup directory
-`[run_keycloak_docker.sh]`
+`[setup/run_keycloak_docker.sh]`
 
 #### Run keycloak in Docker
 `./run_keycloak_docker.sh`
