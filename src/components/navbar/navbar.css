@@ -1,0 +1,47 @@
+.navContainer {
+    width: 100%;
+    height: 100px;
+    /* position: fixed; */
+    padding: 4rem;
+    border-bottom: 1px solid black;
+    margin: 0 0 1rem 1.5rem;
+    list-style-type: none;
+    display: flex;
+    flex-direction: row;
+    color: #282c34;
+    align-items: center;
+    font-family: 'Trebuchet MS', 'Lucida Sans', Arial, sans-serif;
+}
+
+.navBar-link {
+    padding-right: var(--bs-navbar-nav-link-padding-x);
+    padding-left: 1rem;
+    margin-left: 1rem;
+}
+
+.navHeader {
+    width: 20%;
+    float: left;
+    padding: 10px;
+    background: #282c34;
+}
+
+.navCart {
+    width: 20%;
+    float: right;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.cartSpan {
+    background-color: #6394f8;
+    border-radius: 10px;
+    color: white;
+    display: inline-block;
+    font-size: 12px;
+    line-height: 1;
+    padding: 3px 7px;
+    text-align: center;
+    vertical-align: middle;
+    white-space: nowrap;
+}
