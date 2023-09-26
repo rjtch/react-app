@@ -14,6 +14,7 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 The page will reload if you make edits.\
 You will also see any lint errors in the console.
 
+
 ### `npm test`
 
 Launches the test runner in the interactive watch mode.\
@@ -45,3 +46,16 @@ You can learn more in the [Create React App documentation](https://facebook.gith
 
 To learn React, check out the [React documentation](https://reactjs.org/).
 # react-app
+
+# Start resource-server and keycloak
+
+### Clone resource-server
+`git clone git@github.com:rjtch/secure-oauth2-oidc-workshop.git`
+
+#### Replace the existing WORKSHOP_HOME directory in the setup directory
+`[run_keycloak_docker.sh]`
+
+#### Run keycloak in Docker
+`./run_keycloak_docker.sh`
+
+#### Start the resource-server in [lab1/library-server-initial]
