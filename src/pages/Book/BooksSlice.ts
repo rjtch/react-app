@@ -2,19 +2,24 @@ import { createAsyncThunk, createEntityAdapter, createSelector, createSlice, Ent
 import { RootState } from '../../app/store';
 import { CollectionModelBookResource } from '../../api/generated';
 import produce from 'immer';
-import { createBook, getAllBooks } from '../../api/sampleAuthServer';
+import { createBook, getAllBooks, getBookById } from '../../api/sampleAuthServer';
 
 const booksAdapter = createEntityAdapter<CollectionModelBookResource>();
 
-  export interface State extends EntityState<CollectionModelBookResource> {
-    ids: string[];
+export interface State extends EntityState<CollectionModelBookResource> {
+    isbns: string[];
     isLoading: boolean;
     error?: null;
-    status: string
+    status: string;
 }
 
-export const initialState: State = booksAdapter.getInitialState({
-    ids: [],
+export const initialState: EntityState<CollectionModelBookResource> & {
+    isLoading: boolean;
+    isbns: any[];
+    error: null;
+    status: string
+} = booksAdapter.getInitialState({
+    isbns: [],
     isLoading: false,
     error: null,
     status: 'idle'
@@ -26,6 +31,21 @@ export const fetchBooks: any = createAsyncThunk(
         const response = await getAllBooks();
         return response;
     });
+
+export const fetchBookIds: any = createAsyncThunk(
+    'books/fetchBookIds',
+    async () => {
+
+    }
+);
+
+export const fetchBookById: any = createAsyncThunk(
+    'books/fetchBookById',
+    async (id: string) => {
+        const response = await getBookById(id);
+        return response;
+    });
+
 
 export const addNewBook: any = createAsyncThunk(
     'books/createBook',
@@ -105,13 +125,15 @@ const booksSlice = createSlice({
 
 export default booksSlice.reducer;
 
-export const { createNewBook, updateBook} = booksSlice.actions;
+export const { createNewBook, updateBook } = booksSlice.actions;
 
 export const { selectAll: selectAllBooks, selectEntities: selectBooksByIsbnOrTitle } =
     booksAdapter.getSelectors((state: RootState) => state.books);
 
-export const selectBookByTitleOrByIsbn = createSelector(
-    [selectAllBooks, (state, item) => item],
-    (books, key) => books.filter((book) =>
-        book.bookResourceList?.find(book => (book.isbn === key || book.title === key))
-    ));
+export const selectBookByIdentifier = createSelector(
+    [selectAllBooks, (state, identifier) => identifier],
+    (books, identifier) =>
+        books.filter((book) =>
+            book.bookResourceList?.filter(content =>
+                content.identifier = identifier)
+        ));

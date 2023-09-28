@@ -8,7 +8,7 @@ import type { UserResource } from './userResource';
 import type { Link } from './link';
 
 export interface BookResource {
-  identifier?: string;
+  identifier: string;
   isbn: string;
   title: string;
   description: string;

@@ -7,6 +7,7 @@ import { Home } from './pages/home/Home';
 import { About } from './pages/about/About';
 import { BooksRessourcesList } from './pages/Book/BooksRessourcesList';
 import { Basket } from './pages/basket/Basket';
+import { BookDetails } from './pages/Book/BookDetails';
 
 export const oidcConfig = {
     authority: 'http://localhost:8080/auth/realms/workshop/',
@@ -24,9 +25,12 @@ function App() {
         <Sidecar>
             <AuthProvider {...oidcConfig}>
                 <Routes>
-                    <Route path="/about" element={<About/>}/>
-                    <Route path="/books" element={<BooksRessourcesList/>}/>
-                    <Route path="/basket" element={<Basket/>}/>
+                    <Route path="about" element={<About/>}/>
+                    <Route path="books">
+                        <Route index element={<BooksRessourcesList/>}/>
+                        <Route path="details/:identifier" element={<BookDetails/>}/>
+                    </Route>
+                    <Route path="basket" element={<Basket/>}/>
                     <Route path="/" element={<Home/>}/>
                     <Route path="*" element={<Navigate to="/" replace/>}/>
                 </Routes>

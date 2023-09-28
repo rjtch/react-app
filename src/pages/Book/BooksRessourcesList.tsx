@@ -1,9 +1,10 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchBooks, selectAllBooks } from './BooksSlice';
 import { RootState } from '../../app/store';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Spinner } from '../../shared/Spinner';
 import { BookContent } from './BookContent';
+import { Outlet } from 'react-router-dom';
 
 export function BooksRessourcesList() {
     const dispatch = useDispatch();
@@ -34,6 +35,7 @@ export function BooksRessourcesList() {
 
     return (
         <section>
+            <Outlet/>
             <h2 className="book-list">Books</h2>
             {content}
         </section>

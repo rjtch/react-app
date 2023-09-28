@@ -1,6 +1,7 @@
 import { BookResource } from '../../api/generated';
 import { Button, Container, ListGroup, Modal } from 'react-bootstrap';
-import { useState } from 'react';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 interface Props {
     book: BookResource;
@@ -8,10 +9,11 @@ interface Props {
 }
 
 export const BookContent = ({ book, index }: Props) => {
+    const navigate = useNavigate();
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
-    if (book) {
+    if (book && book.identifier) {
         return (
             <Container className="p-3">
                 <ListGroup>
@@ -33,6 +35,11 @@ export const BookContent = ({ book, index }: Props) => {
                         <Modal.Footer>
                             <Button variant="secondary" onClick={handleClose}>
                                 Close
+                            </Button>
+                            <Button variant="secondary" onClick={() => {
+                                navigate(`details/${book.identifier}`);
+                            }}>
+                                details
                             </Button>
                         </Modal.Footer>
                     </Modal>
