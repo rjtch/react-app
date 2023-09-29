@@ -17,7 +17,7 @@ export const BookContent = ({ book, index }: Props) => {
         return (
             <Container className="p-3">
                 <ListGroup>
-                    <Button variant="info" onClick={handleShow}>
+                    <Button variant="outline-dark" onClick={handleShow}>
                         <strong>{book.title}</strong> - By - {book.authors[0] }
                     </Button>
                     <Modal show={show} onHide={handleClose}>
@@ -33,10 +33,10 @@ export const BookContent = ({ book, index }: Props) => {
                             </p>
                         </Modal.Body>
                         <Modal.Footer>
-                            <Button variant="secondary" onClick={handleClose}>
+                            <Button variant="outline-info" onClick={handleClose}>
                                 Close
                             </Button>
-                            <Button variant="secondary" onClick={() => {
+                            <Button variant="outline-info" onClick={() => {
                                 navigate(`details/${book.identifier}`);
                             }}>
                                 details

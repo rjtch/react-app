@@ -5,6 +5,7 @@ import React, { useEffect, useState } from 'react';
 import { Spinner } from '../../shared/Spinner';
 import { BookContent } from './BookContent';
 import { Outlet } from 'react-router-dom';
+import { Button, ListGroup } from 'react-bootstrap';
 
 export function BooksRessourcesList() {
     const dispatch = useDispatch();
@@ -38,6 +39,9 @@ export function BooksRessourcesList() {
             <Outlet/>
             <h2 className="book-list">Books</h2>
             {content}
+            <ListGroup>
+                <Button variant="outline-danger">Create new book</Button>
+            </ListGroup>
         </section>
     );
 }

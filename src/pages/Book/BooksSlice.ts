@@ -95,31 +95,29 @@ const booksSlice = createSlice({
         }
     },
     extraReducers(builder) {
-        builder
-
-            .addCase(fetchBooks.pending, (state, action) => {
+        builder.addCase(fetchBooks.pending, (state, action) => {
                 state.status = 'loading';
             })
 
-            .addCase(fetchBooks.fulfilled, (state, action) => {
+        builder.addCase(fetchBooks.fulfilled, (state, action) => {
                 state.status = 'succeeded';
                 booksAdapter.upsertMany(state, action.payload);
-            })
+            });
 
-            .addCase(fetchBooks.rejected, (state, action) => {
+        builder.addCase(fetchBooks.rejected, (state, action) => {
                 state.status = 'failed';
                 state.error = action.error;
-            })
-
-            // Use the `addOne` reducer for the fulfilled case
-            .addCase(addNewBook, booksAdapter.addOne)
-
-            // Use the `addOne` reducer for the fulfilled case
-            .addCase(updateBook, booksAdapter.updateOne)
-
-            // and provide a default case if no other handlers matched
-            .addDefaultCase((state, action) => {
             });
+
+            // Use the `addOne` reducer for the fulfilled case
+        // builder.addCase(addNewBook, booksAdapter.addOne);
+        //
+        //     // Use the `addOne` reducer for the fulfilled case
+        // builder.addCase(updateBook, booksAdapter.updateOne);
+        //
+        //     // and provide a default case if no other handlers matched
+        // builder.addDefaultCase((state, action) => {
+        //     });
     }
 });
 
