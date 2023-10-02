@@ -46,6 +46,14 @@ export const fetchBookById: any = createAsyncThunk(
         return response;
     });
 
+export const editBook: any = createAsyncThunk(
+    'books/updateBook',
+    async (resource: any) => {
+        const response = await updateBook(resource);
+        // The response includes the complete post object, including unique ID
+        return response;
+    });
+
 
 export const addNewBook: any = createAsyncThunk(
     'books/createBook',
@@ -109,15 +117,27 @@ const booksSlice = createSlice({
                 state.error = action.error;
             });
 
+        builder.addCase(addNewBook.rejected, (state, action) => {
+            state.status = 'failed';
+            state.error = action.error;
+        });
+
             // Use the `addOne` reducer for the fulfilled case
-        // builder.addCase(addNewBook, booksAdapter.addOne);
-        //
-        //     // Use the `addOne` reducer for the fulfilled case
-        // builder.addCase(updateBook, booksAdapter.updateOne);
-        //
-        //     // and provide a default case if no other handlers matched
-        // builder.addDefaultCase((state, action) => {
-        //     });
+        builder.addCase(addNewBook.fulfilled, (state, action) =>{
+            state.status = 'succeeded';
+            booksAdapter.updateOne(state, action.payload)
+        });
+
+        builder.addCase(editBook.rejected, (state, action) =>{
+            state.status = 'failed';
+            state.error = action.error;
+        });
+
+            // Use the `updateOne` reducer for the fulfilled case
+        builder.addCase(editBook.fulfilled, (state, action) =>{
+            state.status = 'succeeded';
+            booksAdapter.updateOne(state, action.payload)
+        });
     }
 });
 

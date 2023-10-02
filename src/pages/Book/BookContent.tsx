@@ -33,10 +33,10 @@ export const BookContent = ({ book, index }: Props) => {
                             </p>
                         </Modal.Body>
                         <Modal.Footer>
-                            <Button variant="outline-info" onClick={handleClose}>
+                            <Button variant="outline-dark" onClick={handleClose}>
                                 Close
                             </Button>
-                            <Button variant="outline-info" onClick={() => {
+                            <Button variant="outline-dark" onClick={() => {
                                 navigate(`details/${book.identifier}`);
                             }}>
                                 details
